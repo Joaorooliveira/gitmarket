@@ -35,10 +35,18 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/auth/registrar").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/produtos/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/categorias").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/categorias/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .build();
     }

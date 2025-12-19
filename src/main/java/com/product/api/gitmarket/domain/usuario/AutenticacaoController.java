@@ -51,6 +51,7 @@ public class AutenticacaoController {
         Usuario usuario = new Usuario();
         usuario.setLogin(request.login());
         usuario.setSenha(passwordEncoder.encode(request.senha()));
+        usuario.setRole(UserRole.USER);
         usuarioRepository.saveAndFlush(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(new UsuarioResponseDTO(usuario.getId(), usuario.getLogin()));
     }
