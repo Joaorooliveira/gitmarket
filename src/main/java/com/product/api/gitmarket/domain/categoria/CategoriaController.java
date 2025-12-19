@@ -59,7 +59,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("{id}")
-    @Operation(summary = "Cadastrar Produto", description = "Excluir de forma logíca uma Categoria especifica" +
+    @Operation(summary = "Excluir Categoria", description = "Excluir de forma logíca uma Categoria especifica" +
             " informando o ID")
     public ResponseEntity<Void> excluirCategoria(@PathVariable UUID id) {
         service.deletarCategoria(id);
