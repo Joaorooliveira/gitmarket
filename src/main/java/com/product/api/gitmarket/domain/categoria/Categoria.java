@@ -16,8 +16,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLRestriction("ativo = true")
-@SQLDelete(sql = "UPDATE categorias SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true") // trazer as categorias que estao ativas apenas
+@SQLDelete(sql = "UPDATE categorias SET ativo = false WHERE id = ?") // muda a funcao do delete para update
 public class Categoria {
 
     @Id
