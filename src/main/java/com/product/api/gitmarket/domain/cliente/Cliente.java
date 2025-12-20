@@ -3,7 +3,6 @@ package com.product.api.gitmarket.domain.cliente;
 import com.product.api.gitmarket.domain.endereco.Endereco;
 import com.product.api.gitmarket.domain.usuario.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.UUID;
@@ -30,10 +29,6 @@ public class Cliente {
     private String nome;
 
     @Column(name = "telefone", nullable = false, unique = true, length = 15)
-    @Pattern(
-            regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}",
-            message = "O telefone deve estar no formato (XX) XXXXX-XXXX"
-    )
     private String telefone;
 
     @Embedded
