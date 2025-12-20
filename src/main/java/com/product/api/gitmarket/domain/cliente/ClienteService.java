@@ -9,11 +9,14 @@ import com.product.api.gitmarket.domain.usuario.UserRole;
 import com.product.api.gitmarket.domain.usuario.Usuario;
 import com.product.api.gitmarket.domain.usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClienteService {
@@ -63,5 +66,21 @@ public class ClienteService {
         return ClienteResponseDTO.fromEntity(cliente);
     }
 
+    public Page<ClienteResponseDTO> listarClientes(Pageable pageable) {
+
+        return repository.findAll(pageable).map(ClienteResponseDTO::fromEntity);
+    }
+
+    @Transactional
+    public void inativarCliente(UUID id) {
+        var cliente = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+
+        repository.delete(cliente);
+
+        if (cliente.getUsuario() != null) {
+            usuarioRepository.delete(cliente.getUsuario());
+        }
+    }
 }
 
