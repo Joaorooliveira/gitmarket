@@ -1,5 +1,6 @@
 package com.product.api.gitmarket.domain.endereco;
 
+import com.product.api.gitmarket.domain.endereco.dto.EnderecoRequestDTO;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,13 @@ public class Endereco {
     private String uf;
     private String bairro;
 
+    public Endereco(EnderecoRequestDTO endereco) {
+        this(endereco.logradouro(),
+                endereco.numero(),
+                endereco.complemento(),
+                endereco.cep(),
+                endereco.cidade(),
+                endereco.uf(),
+                endereco.bairro());
+    }
 }
