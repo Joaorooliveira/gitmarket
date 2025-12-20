@@ -4,6 +4,8 @@ import com.product.api.gitmarket.domain.endereco.Endereco;
 import com.product.api.gitmarket.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
 
@@ -14,6 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLRestriction("ativo = true") // trazer as categorias que estao ativas apenas
+@SQLDelete(sql = "UPDATE clientes SET ativo = false WHERE id = ?")
 public class Cliente {
 
     @Id
@@ -37,5 +41,7 @@ public class Cliente {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
+
+    private Boolean ativo = true;
 
 }
