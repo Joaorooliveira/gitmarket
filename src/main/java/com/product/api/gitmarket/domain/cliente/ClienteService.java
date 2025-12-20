@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,5 +83,15 @@ public class ClienteService {
             usuarioRepository.delete(cliente.getUsuario());
         }
     }
+
+    @Transactional
+    public ClienteResponseDTO atualizarCliente(UUID id, ClienteRequestDTO clienteRequestDTO) {
+        return null;
+    }
+
+    public Optional<Cliente> listarCliente(UUID id) {
+        return repository.findById(id);
+    }
+
 }
 
