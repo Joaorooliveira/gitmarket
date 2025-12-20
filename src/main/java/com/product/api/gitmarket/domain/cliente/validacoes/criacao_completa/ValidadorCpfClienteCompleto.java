@@ -6,12 +6,12 @@ import com.product.api.gitmarket.infra.exception.ValidacaoException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidadorCpfCadastrado implements ValidadorClienteUsuario {
+public class ValidadorCpfClienteCompleto implements ValidadorClienteUsuario {
 
 
     private final ClienteRepository clienteRepository;
 
-    public ValidadorCpfCadastrado(ClienteRepository clienteRepository) {
+    public ValidadorCpfClienteCompleto(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
