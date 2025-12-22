@@ -114,6 +114,7 @@ public class ClienteService {
     }
 
     public Optional<Cliente> listarCliente(UUID id) {
+        validarPermissao(repository.findById(id).get(), "visualizar");
         return repository.findById(id);
     }
 
