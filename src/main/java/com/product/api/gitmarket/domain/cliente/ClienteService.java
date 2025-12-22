@@ -13,6 +13,8 @@ import com.product.api.gitmarket.domain.usuario.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,8 +52,6 @@ public class ClienteService {
         var entity = repository.save(clienteRequestDTO.toEntity(usuario));
 
         return ClienteResponseDTO.fromEntity(entity);
-
-
     }
 
     @Transactional
@@ -70,19 +70,27 @@ public class ClienteService {
     }
 
     public Page<ClienteResponseDTO> listarClientes(Pageable pageable) {
-
         return repository.findAll(pageable).map(ClienteResponseDTO::fromEntity);
     }
 
     @Transactional
     public void inativarCliente(UUID id) {
-        var cliente = repository.findById(id)
+        var clienteAlvo = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
-        repository.delete(cliente);
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        var usuarioLogado = (Usuario) auth.getPrincipal();
 
-        if (cliente.getUsuario() != null) {
-            usuarioRepository.delete(cliente.getUsuario());
+        if (usuarioLogado.getRole() != UserRole.ADMIN) {
+            if (clienteAlvo.getUsuario() == null || !clienteAlvo.getUsuario().getId().equals(usuarioLogado.getId())) {
+                throw new AccessDeniedException("Você não tem permissão para inativar este perfil.");
+            }
+        }
+
+        repository.delete(clienteAlvo);
+
+        if (clienteAlvo.getUsuario() != null) {
+            usuarioRepository.delete(clienteAlvo.getUsuario());
         }
     }
 
@@ -117,4 +125,3 @@ public class ClienteService {
     }
 
 }
-
