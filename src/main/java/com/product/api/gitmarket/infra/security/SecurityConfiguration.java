@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/registrar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/cadastro").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
