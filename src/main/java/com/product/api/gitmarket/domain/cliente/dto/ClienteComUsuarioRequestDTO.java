@@ -16,10 +16,7 @@ public record ClienteComUsuarioRequestDTO(
         @NotBlank
         String nome,
 
-        @Pattern(
-                regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}",
-                message = "O telefone deve estar no formato (XX) XXXXX-XXXX"
-        )
+        @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter apenas números (DDD + Número), entre 10 e 11 dígitos")
         String telefone,
 
         @Valid
