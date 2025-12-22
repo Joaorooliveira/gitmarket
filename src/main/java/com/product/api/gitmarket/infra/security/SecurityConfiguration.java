@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/clientes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/clientes/**").hasAnyRole("ADMIN", "USER")
 
                         .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("ADMIN")
