@@ -77,7 +77,6 @@ public class ClienteService {
         var clienteAlvo = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
-        // Chama o método de segurança que criamos lá embaixo
         validarPermissao(clienteAlvo, "inativar");
 
         repository.delete(clienteAlvo);
@@ -92,7 +91,6 @@ public class ClienteService {
         var clienteEntity = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cliente nao encontrado"));
 
-        // SEGURANÇA: Verifica se é o dono da conta antes de deixar atualizar
         validarPermissao(clienteEntity, "atualizar");
 
         if (dto.cpf() != null) {
