@@ -1,4 +1,9 @@
 package com.product.api.gitmarket.domain.item_pedido.dto;
 
-public record ItemPedidoRequestDTO() {
+import java.util.UUID;
+
+public record ItemPedidoRequestDTO(
+        UUID produtoId,
+        Integer quantidade
+) {
 }
