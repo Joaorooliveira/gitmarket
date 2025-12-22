@@ -44,18 +44,6 @@ public class AutenticacaoController {
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 
-//    @PostMapping("/registrar")
-//    @Operation(summary = "Registrar Usuario", description = "Registrar um usuario e retorna dados do usuario criado")
-//    public ResponseEntity<UsuarioResponseDTO> registrarUsuario(@RequestBody @Valid UsuarioRequestDTO request) {
-//        Usuario usuario = new Usuario();
-//        usuario.setLogin(request.login());
-//        usuario.setSenha(passwordEncoder.encode(request.senha()));
-//        usuario.setRole(UserRole.USER);
-//        usuarioRepository.saveAndFlush(usuario);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(new UsuarioResponseDTO(usuario.getId(), usuario.getLogin()));
-//    }
-
-
     @PostMapping("/cadastro")
     @Operation(summary = "Cadastrar Cliente",
             description = "Cria o Usuário de acesso e o Cliente com dados pessoais")
