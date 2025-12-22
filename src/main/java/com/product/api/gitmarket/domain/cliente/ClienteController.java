@@ -1,5 +1,6 @@
 package com.product.api.gitmarket.domain.cliente;
 
+import com.product.api.gitmarket.domain.cliente.dto.ClienteAtualizarRequestDTO;
 import com.product.api.gitmarket.domain.cliente.dto.ClienteResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,6 +38,13 @@ public class ClienteController {
     public ResponseEntity<Void> inativarCliente(@PathVariable UUID id) {
         clienteService.inativarCliente(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("{id}")
+    @Operation(summary = "Atualizar Cliente", description = "Atualizar dados de Cliente especifico pelo ID")
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable UUID id,
+                                                               @RequestBody ClienteAtualizarRequestDTO dto) {
+        return ResponseEntity.ok(clienteService.atualizarCliente(id, dto));
     }
 
 
