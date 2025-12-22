@@ -62,7 +62,7 @@ public class ProdutoController {
     ProdutoAtualizarRequestDTO dto) {
         return ResponseEntity.ok(service.atualizarProduto(id, dto));
     }
-
+    
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar Produto", description = "Deleta um Produto especifico informando o ID")
     public ResponseEntity<Void> deletarProduto(@PathVariable UUID id) {
