@@ -42,7 +42,6 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponseDTO salvarCliente(ClienteRequestDTO clienteRequestDTO) {
-
         validadoresSalvarCliente.forEach(v -> v.validar(clienteRequestDTO));
 
         var usuario = usuarioRepository.findById(clienteRequestDTO.usuario_id()).orElseThrow(
@@ -78,14 +77,8 @@ public class ClienteService {
         var clienteAlvo = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var usuarioLogado = (Usuario) auth.getPrincipal();
-
-        if (usuarioLogado.getRole() != UserRole.ADMIN) {
-            if (clienteAlvo.getUsuario() == null || !clienteAlvo.getUsuario().getId().equals(usuarioLogado.getId())) {
-                throw new AccessDeniedException("Você não tem permissão para inativar este perfil.");
-            }
-        }
+        // Chama o método de segurança que criamos lá embaixo
+        validarPermissao(clienteAlvo, "inativar");
 
         repository.delete(clienteAlvo);
 
@@ -96,9 +89,11 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponseDTO atualizarCliente(UUID id, ClienteAtualizarRequestDTO dto) {
-
         var clienteEntity = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cliente nao encontrado"));
+
+        // SEGURANÇA: Verifica se é o dono da conta antes de deixar atualizar
+        validarPermissao(clienteEntity, "atualizar");
 
         if (dto.cpf() != null) {
             clienteEntity.setCpf(dto.cpf());
@@ -122,6 +117,17 @@ public class ClienteService {
 
     public Optional<Cliente> listarCliente(UUID id) {
         return repository.findById(id);
+    }
+
+    private void validarPermissao(com.product.api.gitmarket.domain.cliente.Cliente clienteAlvo, String acao) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        var usuarioLogado = (Usuario) auth.getPrincipal();
+
+        if (usuarioLogado.getRole() != UserRole.ADMIN) {
+            if (clienteAlvo.getUsuario() == null || !clienteAlvo.getUsuario().getId().equals(usuarioLogado.getId())) {
+                throw new AccessDeniedException("Você não tem permissão para " + acao + " este perfil.");
+            }
+        }
     }
 
 }
