@@ -1,10 +1,12 @@
 package com.product.api.gitmarket.domain.cliente;
 
+import com.product.api.gitmarket.domain.cliente.dto.ClienteAtualizarRequestDTO;
 import com.product.api.gitmarket.domain.cliente.dto.ClienteComUsuarioRequestDTO;
 import com.product.api.gitmarket.domain.cliente.dto.ClienteRequestDTO;
 import com.product.api.gitmarket.domain.cliente.dto.ClienteResponseDTO;
 import com.product.api.gitmarket.domain.cliente.validacoes.criacao.ValidadorCliente;
 import com.product.api.gitmarket.domain.cliente.validacoes.criacao_completa.ValidadorClienteUsuario;
+import com.product.api.gitmarket.domain.endereco.Endereco;
 import com.product.api.gitmarket.domain.usuario.UserRole;
 import com.product.api.gitmarket.domain.usuario.Usuario;
 import com.product.api.gitmarket.domain.usuario.UsuarioRepository;
@@ -85,8 +87,29 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteResponseDTO atualizarCliente(UUID id, ClienteRequestDTO clienteRequestDTO) {
-        return null;
+    public ClienteResponseDTO atualizarCliente(UUID id, ClienteAtualizarRequestDTO dto) {
+
+        var clienteEntity = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Cliente nao encontrado"));
+
+        if (dto.cpf() != null) {
+            clienteEntity.setCpf(dto.cpf());
+        }
+        if (dto.nome() != null) {
+            clienteEntity.setNome(dto.nome());
+        }
+        if (dto.telefone() != null) {
+            clienteEntity.setTelefone(dto.telefone());
+        }
+        if (dto.endereco() != null) {
+            if (clienteEntity.getEndereco() == null) {
+                clienteEntity.setEndereco(new Endereco(dto.endereco()));
+            } else {
+                clienteEntity.getEndereco().atualizarInformacoes(dto.endereco());
+            }
+        }
+
+        return ClienteResponseDTO.fromEntity(clienteEntity);
     }
 
     public Optional<Cliente> listarCliente(UUID id) {
