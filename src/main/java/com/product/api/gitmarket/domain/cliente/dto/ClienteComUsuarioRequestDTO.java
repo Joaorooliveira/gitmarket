@@ -9,8 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public record ClienteRequestDTO(
-
+public record ClienteComUsuarioRequestDTO(
         @NotBlank
         String cpf,
 
@@ -27,12 +26,11 @@ public record ClienteRequestDTO(
         @NotNull
         EnderecoRequestDTO endereco,
 
-        @NotNull
-        Long usuario_id
-
-
+        @NotBlank
+        String login,
+        @NotBlank
+        String senha
 ) {
-
     public Cliente toEntity(Usuario usuario) {
         Cliente cliente = new Cliente();
         cliente.setCpf(this.cpf);
@@ -42,4 +40,5 @@ public record ClienteRequestDTO(
         cliente.setUsuario(usuario);
         return cliente;
     }
+
 }

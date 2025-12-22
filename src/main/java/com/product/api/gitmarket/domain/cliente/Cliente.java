@@ -3,7 +3,12 @@ package com.product.api.gitmarket.domain.cliente;
 import com.product.api.gitmarket.domain.endereco.Endereco;
 import com.product.api.gitmarket.domain.usuario.Usuario;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
 
@@ -13,7 +18,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@SQLRestriction("ativo = true") // trazer as categorias que estao ativas apenas
+@SQLDelete(sql = "UPDATE clientes SET ativo = false WHERE id = ?")
 public class Cliente {
 
     @Id
@@ -37,5 +43,7 @@ public class Cliente {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     private Usuario usuario;
+
+    private Boolean ativo = true;
 
 }
