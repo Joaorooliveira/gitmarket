@@ -47,5 +47,13 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.atualizarCliente(id, dto));
     }
 
+    @GetMapping("{id}")
+    @Operation(summary = "Listar Cliente", description = "Lista Cliente especifico pelo ID")
+    public ResponseEntity<ClienteResponseDTO> listarCliente(@PathVariable UUID id) {
+        return clienteService.listarCliente(id)
+                .map(usuario -> ResponseEntity.ok(ClienteResponseDTO.fromEntity(usuario)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
 }
