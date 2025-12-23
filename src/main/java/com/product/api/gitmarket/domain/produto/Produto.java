@@ -35,4 +35,19 @@ public class Produto {
     private Categoria categoria;
 
 
+    public void baixarEstoque(int quantidadeParaBaixar) {
+        if (quantidadeParaBaixar <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser maior que zero");
+        }
+
+        if (this.quantidade < quantidadeParaBaixar) {
+            throw new RuntimeException("Estoque insuficiente para o produto: " + this.nome);
+        }
+
+        this.quantidade -= quantidadeParaBaixar;
+    }
+
+    public void estornarEstoque(int quantidadeParaDevolver) {
+        this.quantidade += quantidadeParaDevolver;
+    }
 }
