@@ -120,4 +120,5 @@ src/main/java/com/product/api/gitmarket
 │ ├── security # Configurações de Segurança e Token JWT
 │ └── springdoc # Configuração do Swagger
 └── GitMarketApplication.java
+
 ```
