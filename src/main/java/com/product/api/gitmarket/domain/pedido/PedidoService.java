@@ -5,6 +5,7 @@ import com.product.api.gitmarket.domain.item_pedido.ItemPedido;
 import com.product.api.gitmarket.domain.pedido.dto.PedidoRequestDTO;
 import com.product.api.gitmarket.domain.pedido.dto.PedidoResponseDTO;
 import com.product.api.gitmarket.domain.produto.ProdutoRepository;
+import com.product.api.gitmarket.infra.exception.RegraNegocioException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -91,7 +92,7 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
 
         if (pedido.getStatus() == Status.ENVIADO || pedido.getStatus() == Status.ENTREGUE) {
-            throw new RuntimeException("Não é possível cancelar um pedido que já está em transporte");
+            throw new RegraNegocioException("Não é possível cancelar um pedido que já está em transporte");
         }
 
         for (ItemPedido item : pedido.getItens()) {
@@ -108,7 +109,7 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
 
         if (pedido.getStatus() != Status.AGUARDANDO_PAGAMENTO) {
-            throw new RuntimeException("Este pedido já foi processado ou cancelado");
+            throw new RegraNegocioException("Este pedido já foi processado ou cancelado");
         }
 
         pedido.setStatus(Status.PAGO);
