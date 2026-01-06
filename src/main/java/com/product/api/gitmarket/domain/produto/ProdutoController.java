@@ -1,5 +1,6 @@
 package com.product.api.gitmarket.domain.produto;
 
+import com.product.api.gitmarket.domain.categoria.Categoria;
 import com.product.api.gitmarket.domain.produto.dto.ProdutoAtualizarRequestDTO;
 import com.product.api.gitmarket.domain.produto.dto.ProdutoRequestDTO;
 import com.product.api.gitmarket.domain.produto.dto.ProdutoResponseDTO;
@@ -40,11 +41,25 @@ public class ProdutoController {
     }
 
     @GetMapping
-    @Operation(summary = "Listar Produto", description = "Lista todos os produtos ou produtos por categoria")
+    @Operation(summary = "Listar Produtos", description = "Lista produtos com filtros dinâmicos (Nome, Preço," +
+            " Categoria, etc)")
     public ResponseEntity<Page<ProdutoResponseDTO>> listarProdutos(
             @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) java.math.BigDecimal preco,
             @RequestParam(required = false) UUID categoriaId) {
-        return ResponseEntity.ok(service.listarProdutos(pageable, categoriaId));
+
+        Produto probe = new Produto();
+        probe.setNome(nome);
+        probe.setPreco(preco);
+
+        if (categoriaId != null) {
+            Categoria cat = new Categoria();
+            cat.setId(categoriaId);
+            probe.setCategoria(cat);
+        }
+
+        return ResponseEntity.ok(service.listarProdutos(pageable, probe));
     }
 
     @GetMapping("{id}")
