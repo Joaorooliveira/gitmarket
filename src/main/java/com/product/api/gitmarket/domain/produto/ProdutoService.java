@@ -7,6 +7,8 @@ import com.product.api.gitmarket.domain.produto.dto.ProdutoResponseDTO;
 import com.product.api.gitmarket.domain.produto.validacoes.atualizacao.ValidadorAtualizacaoProduto;
 import com.product.api.gitmarket.domain.produto.validacoes.criacao.ValidadorProduto;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,15 +49,15 @@ public class ProdutoService {
         return ProdutoResponseDTO.fromEntity(produto);
     }
 
-    public Page<ProdutoResponseDTO> listarProdutos(Pageable pageable, UUID categoriaId) {
-        if (categoriaId != null) {
-            if (!categoriaRepository.existsById(categoriaId)) {
-                throw new EntityNotFoundException("Categoria não encontrada com o ID: " + categoriaId);
-            }
-            return produtoRepository.findByCategoriaId(categoriaId, pageable)
-                    .map(ProdutoResponseDTO::fromEntity);
-        }
-        return produtoRepository.findAll(pageable)
+    public Page<ProdutoResponseDTO> listarProdutos(Pageable pageable, Produto filtro) {
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreNullValues();
+
+        Example<Produto> example = Example.of(filtro, matcher);
+
+        return produtoRepository.findAll(example, pageable)
                 .map(ProdutoResponseDTO::fromEntity);
     }
 

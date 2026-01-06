@@ -2,6 +2,7 @@ package com.product.api.gitmarket.domain.produto;
 
 
 import com.product.api.gitmarket.domain.categoria.Categoria;
+import com.product.api.gitmarket.infra.exception.RegraNegocioException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class Produto {
     @Column(nullable = false)
     private BigDecimal preco;
     @Column(nullable = false)
-    private int quantidade;
+    private Integer quantidade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
@@ -41,7 +42,7 @@ public class Produto {
         }
 
         if (this.quantidade < quantidadeParaBaixar) {
-            throw new RuntimeException("Estoque insuficiente para o produto: " + this.nome);
+            throw new RegraNegocioException("Estoque insuficiente para o produto: " + this.nome);
         }
 
         this.quantidade -= quantidadeParaBaixar;
