@@ -67,7 +67,7 @@ public class ProdutoController {
     public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable UUID id) {
         return service.buscarPorId(id)
                 .map(produto -> ResponseEntity.ok(ProdutoResponseDTO.fromEntity(produto))) // converte entity para DTO
-                .orElse(ResponseEntity.notFound().build()); // se não achar → 404
+                .orElseGet(() -> ResponseEntity.notFound().build()); // se não achar → 404
     }
 
     @PatchMapping("{id}")

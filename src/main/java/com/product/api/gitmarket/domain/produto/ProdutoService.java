@@ -45,6 +45,7 @@ public class ProdutoService {
         var categoria = categoriaRepository.findById(dto.categoriaId())
                 .orElseThrow(() -> new EntityNotFoundException("Categoria nao encontrada com o ID: " + dto.categoriaId()));
 
+        
         var produto = produtoRepository.save(dto.toEntity(categoria));
         return ProdutoResponseDTO.fromEntity(produto);
     }
